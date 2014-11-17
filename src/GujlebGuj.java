@@ -26,7 +26,5 @@ public class GujlebGuj {
         server.addPlayerToPoker("pokoj_malgosi", boty_nic_nie_robio);
 
         server.displayPlayersTable("pokoj_malgosi");
-
-
     }
 }
