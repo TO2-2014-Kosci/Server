@@ -5,7 +5,7 @@ import java.util.Set;
  * Created by Janusz on 11-11-2014.
  */
 public class Poker {
-    Set<Player> setPlayers = new HashSet<Player>();
+    Set<Player> Players = new HashSet<Player>();
     private String PokerID, game, message;
 
     public Poker (String pokerid, String game, String message) {
@@ -23,11 +23,11 @@ public class Poker {
     }
 
     public boolean addPlayer (Player player) {
-        return setPlayers.add(player);
+        return Players.add(player);
     }
 
     public void displayListOfplayers() {
-        for (Player p : setPlayers) {
+        for (Player p : Players) {
             System.out.println(p.getLogin());
         }
     }

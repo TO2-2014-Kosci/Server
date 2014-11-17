@@ -10,10 +10,13 @@ public class GujlebGuj {
         server.newPoker("pokoj_malgosi", "gra w pokera", "parametry gry");
 
         Player zbyszek = new Player("zbyszek", 1);
+        Player zbyszek2 = new Player("zbyszek", 1);
+        Player zbyszek3 = new Player("zbyszek", 1);
         Player halinka = new Player("halinka", 1);
         Player zosia = new Player("zosia", 1);
         Player zygmunt = new Player("zygmunt", 1);
         Player boty_nic_nie_robio = new Player("boty_nic_nie_robio", 1);
+        Player boty_nic_nie_robio2 = new Player("boty_nic_nie_robio", 1);
 
         server.addPlayerToPoker("pokoj_malgosi", zbyszek);
         server.addPlayerToPoker("pokoj_malgosi", halinka);
@@ -22,8 +25,9 @@ public class GujlebGuj {
         server.addPlayerToPoker("pokoj_malgosi", boty_nic_nie_robio);
 
         //dodaje kolejnych graczy o tym samym loginie
-        server.addPlayerToPoker("pokoj_malgosi", zbyszek);
-        server.addPlayerToPoker("pokoj_malgosi", boty_nic_nie_robio);
+        server.addPlayerToPoker("pokoj_malgosi", zbyszek2);
+        server.addPlayerToPoker("pokoj_malgosi", zbyszek3);
+        server.addPlayerToPoker("pokoj_malgosi", boty_nic_nie_robio2);
 
         server.displayPlayersTable("pokoj_malgosi");
     }
