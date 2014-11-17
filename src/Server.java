@@ -23,11 +23,11 @@ public class Server {
     }
 
     public boolean addPlayerToPoker(String pokerid, Player player) {
-            for (Poker p : setPokers)
-                if (p.getPokerID() == pokerid) {
-                    if(setPlayers.add(player)) p.addPlayer(player);
-                    return true;    //tak, ten return to swiadomie w tym miejscu
-                }
+        for (Poker p : setPokers)
+            if (p.getPokerID() == pokerid) {
+                if (setPlayers.add(player)) p.addPlayer(player);
+                return true;    //tak, ten return to swiadomie w tym miejscu
+            }
         return false;
     }
 
