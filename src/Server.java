@@ -32,8 +32,8 @@ public class Server {
     }
 
     public void displayPlayersTable(String pokername){
-            for (Poker p : setPokers)
-                if (p.getPokerID() == pokername)
-                    p.displayListOfplayers();
+        for (Poker p : setPokers)
+            if (p.getPokerID() == pokername)
+                p.displayListOfplayers();
     }
 }
