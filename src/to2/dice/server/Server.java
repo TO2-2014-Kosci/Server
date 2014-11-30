@@ -21,6 +21,7 @@ public class Server implements GameServer {
     Set<GameController> controllers = new HashSet<GameController>();
 
     public Server() {
+        
     }
 
     public Response login (String login) {
