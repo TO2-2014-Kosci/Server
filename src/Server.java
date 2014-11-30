@@ -1,12 +1,13 @@
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Set;
 
 /**
  * Created by Janusz on 10-11-2014.
  */
 public class Server {
-    Set<Player> Players = new HashSet<Player>();
-    Set<Poker> Pokers = new HashSet<Poker>();
+    Hashtable<Player, GameController> players = new Hashtable<Player, GameController>();
+    Set<GameController> controllers = new HashSet<GameController>();
 
     public Server() {
     }
@@ -14,24 +15,24 @@ public class Server {
     public void run() {
     }
 
-    public boolean newPoker(String pokerid, String game, String message) {
-        Poker newPoker = new Poker(pokerid, game, message);
-        Pokers.add(newPoker);
-        newPoker.run();
+    public boolean createRoom(String pokerid, String game, String message) {
+        GameController newGameController = new GameController(pokerid, game, message);
+        controllers.add(newGameController);
+        newGameController.run();
         return true;
     }
 
     public boolean addPlayerToPoker(String pokerid, Player player) {
-        for (Poker p : Pokers)
+        for (GameController p : controllers)
             if (p.getPokerID() == pokerid) {
-                if (Players.add(player)) p.addPlayer(player);
-                return true;    //tak, ten return to swiadomie w tym miejscu
+                if (players.put(player, p)==null) p.addPlayer(player);
+                return true;
             }
         return false;
     }
 
     public void displayPlayersTable(String pokername){
-        for (Poker p : Pokers)
+        for (GameController p : controllers)
             if (p.getPokerID() == pokername)
                 p.displayListOfplayers();
     }

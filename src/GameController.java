@@ -4,11 +4,11 @@ import java.util.Set;
 /**
  * Created by Janusz on 11-11-2014.
  */
-public class Poker {
+public class GameController {
     Set<Player> Players = new HashSet<Player>();
     private String PokerID, game, message;
 
-    public Poker (String pokerid, String game, String message) {
+    public GameController(String pokerid, String game, String message) {
         this.PokerID = pokerid;
         this.game = game;
         this.message = message;

@@ -4,7 +4,7 @@
 public class Player {
     private String login; //public? raczej nie
     private int age;
-    public Poker table;
+    public GameController table;
 
     public Player(String login, int age) {
         this.login = login;
@@ -15,7 +15,7 @@ public class Player {
         return this.login;
     }
 
-    @Override
+   @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;

@@ -7,7 +7,7 @@ public class GujlebGuj {
     public void run () {
         Server server = new Server();
 
-        server.newPoker("pokoj_malgosi", "gra w pokera", "parametry gry");
+        server.createRoom("pokoj_malgosi", "gra w pokera", "parametry gry");
 
         Player zbyszek = new Player("zbyszek", 1);
         Player zbyszek2 = new Player("zbyszek", 1);
