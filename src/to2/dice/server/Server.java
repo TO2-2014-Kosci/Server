@@ -37,9 +37,8 @@ public class Server implements GameServer {
     public Response createRoom(String roomName, GameSettings roomSettings, String login) {
         IGameControllerFactory gameControllerFactory = new IGameControllerFactory();
         GameController gameController = gameControllerFactory.createGameControler(this, roomSettings);
-
         for (GameController c : controllers)
-            if (c.settings roomName.equals(gameController.roomName)) return new Response(Response.Type.FAILURE);
+            if (c.getGameInfo().getSettings().getName().equals(gameController.getGameInfo().getSettings().getName())) return new Response(Response.Type.FAILURE);
         controllers.add(gameController);
         return new Response(Response.Type.SUCCESS);
     }
@@ -52,11 +51,10 @@ public class Server implements GameServer {
         return response;
     }
 
-    //nie bangla
     public List<GameInfo> getRoomList() {
         List<GameInfo> roomList = new ArrayList<GameInfo>();
         for (GameController c : controllers) {
-            GameInfo gameInfo = c.getGameInfo;
+            GameInfo gameInfo = c.getGameInfo();
             roomList.add(gameInfo);
         }
         return roomList;
