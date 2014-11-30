@@ -21,7 +21,7 @@ public class Server implements GameServer {
     Set<GameController> controllers = new HashSet<GameController>();
 
     public Server() {
-        
+
     }
 
     public Response login (String login) {
@@ -55,8 +55,7 @@ public class Server implements GameServer {
     public List<GameInfo> getRoomList() {
         List<GameInfo> roomList = new ArrayList<GameInfo>();
         for (GameController c : controllers) {
-            GameInfo gameInfo = c.getGameInfo();
-            roomList.add(gameInfo);
+            roomList.add(c.getGameInfo());
         }
         return roomList;
     }
