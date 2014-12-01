@@ -15,7 +15,7 @@ import java.util.*;
  */
 
 public class Server implements GameServer {
-    Hashtable<String, GameController> players = new Hashtable<String, GameController>();
+    HashMap<String, GameController> players = new HashMap<String, GameController>();
     Set<GameController> controllers = new HashSet<GameController>();
 
     public Server() {
