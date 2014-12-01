@@ -16,7 +16,39 @@ import java.util.Set;
  * @version 0.1
  */
 public final class RequestSerializer {
-    public static JSONObject serializeSettings(GameSettings settings)  {
+    public static JSONObject serializeGameAction(GameAction action) {
+        JSONObject actionObject = new JSONObject();
+        actionObject.put("type", action.getType().name())
+                .put("host", action.getSender());
+
+        switch (action.getType()) {
+            case REROLL:
+                actionObject.put("dice", new JSONArray(((RerollAction) action).getChosenDice()));
+            default:
+                break;
+        }
+
+        return actionObject;
+    }
+
+    public static GameAction GameAction(JSONObject actionObject) {
+        GameActionType type = GameActionType.valueOf(actionObject.getString("type"));
+        String host = actionObject.getString("host");
+
+        switch (type) {
+            case REROLL:
+                JSONArray diceArray = actionObject.getJSONArray("dice");
+                boolean[] dice = new boolean[diceArray.length()];
+                for (int i = 0; i < dice.length; i++)
+                    dice[i] = diceArray.getBoolean(i);
+                return new RerollAction(type, host, dice);
+            default:
+                return new GameAction(type, host);
+        }
+    }
+
+
+    public static JSONObject serializeSettings(GameSettings settings) {
         JSONObject settingsObject = new JSONObject();
         settingsObject.put("room_name", settings.getName())
                 .put("game_type", settings.getGameType().name())
