@@ -2,8 +2,8 @@ package to2.dice.messaging;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import to2.dice.common.BotLevel;
-import to2.dice.common.GameSettings;
+import to2.dice.game.BotLevel;
+import to2.dice.game.GameSettings;
 
 /**
  * @author Fan
@@ -48,7 +48,7 @@ public class CreateGameRequest extends LoginRequest {
 
         JSONArray bots = new JSONArray();
         for (BotLevel l : BotLevel.values()) {
-            Integer n = settings.getBotsNumber().get(l);
+            Integer n = settings.getBotsNumbers().get(l);
             if (n != null && n != 0)
                 bots.put(new JSONObject().put(l.name(), n.intValue()));
         }

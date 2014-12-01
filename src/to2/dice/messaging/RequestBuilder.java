@@ -1,6 +1,6 @@
 package to2.dice.messaging;
 
-import to2.dice.common.GameSettings;
+import to2.dice.game.GameSettings;
 
 /**
  * @author Fan
