@@ -5,9 +5,7 @@ import to2.dice.controllers.GameControllerFactory;
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameState;
-import to2.dice.game.Player;
 import to2.dice.messaging.GameAction;
-import to2.dice.messaging.GameActionType;
 import to2.dice.messaging.Response;
 
 import java.util.*;
@@ -88,11 +86,15 @@ public class Server implements GameServer {
     }
 
     /**
-     * 
+     *
      * @param gameController
      */
     @Override
     public void finishGame(GameController gameController) {
-
+        for (GameController c : controllers)
+            if (c.getGameInfo().getSettings().getName().equals(gameController.getGameInfo().getSettings().getName())) {
+                controllers.remove(c);
+                return;
+            }
     }
 }
