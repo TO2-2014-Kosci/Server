@@ -13,7 +13,7 @@ public abstract class Request {
 
     public static Request parse(String json) {
         JSONObject jsonObject = new JSONObject(json);
-
+        //TODO add deserializing logic
         return null;
     }
 

@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * @version 0.1
  */
 public class GameActionRequest extends LoginRequest {
-    private to2.dice.messaging.GameAction action;
+    protected to2.dice.messaging.GameAction action;
 
     public GameActionRequest(String login, to2.dice.messaging.GameAction action) {
         super(login);
