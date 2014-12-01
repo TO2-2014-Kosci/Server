@@ -15,7 +15,7 @@ import java.util.Set;
  * @author Fan
  * @version 0.1
  */
-public class RequestSerializer {
+public final class RequestSerializer {
     public static JSONObject serializeSettings(GameSettings settings)  {
         JSONObject settingsObject = new JSONObject();
         settingsObject.put("room_name", settings.getName())

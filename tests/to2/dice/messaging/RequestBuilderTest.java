@@ -58,4 +58,15 @@ public class RequestBuilderTest {
         assertEquals("Request with login and settings parameters has type CreateGame",
                 Request.Type.CREATE_GAME, request.getType());
     }
+
+    @Test
+    public void testInvalidTypeValidation() throws Exception {
+        thrown.expect(IllegalArgumentException.class);
+
+        Request request = new RequestBuilder()
+                .login("test_login")
+                .settings(mock(GameSettings.class))
+                .action(mock(GameAction.class)).build();
+
+    }
 }
