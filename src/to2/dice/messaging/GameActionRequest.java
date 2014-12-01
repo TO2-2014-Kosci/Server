@@ -21,7 +21,7 @@ public class GameActionRequest extends LoginRequest {
 
     @Override
     public Type getType() {
-        return null;
+        return Type.GAME_ACTION;
     }
 
     public to2.dice.messaging.GameAction getAction() {

@@ -11,6 +11,13 @@ public abstract class Request {
         LOGIN, CREATE_GAME, GAME_ACTION, GET_ROOM_LIST
     }
 
+    public static Request parse(String json) {
+        JSONObject jsonObject = new JSONObject(json);
+
+        return null;
+    }
+
+
     public abstract JSONObject toJson();
 
     public abstract Type getType();
