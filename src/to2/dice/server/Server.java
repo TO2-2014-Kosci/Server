@@ -23,6 +23,11 @@ public class Server implements GameServer {
 
     }
 
+    /**
+     *
+     * @param login
+     * @return
+     */
     public Response login (String login) {
         Player player = new Player(login, false, 5);        //???
         if (players.contains(player)) {
@@ -33,6 +38,13 @@ public class Server implements GameServer {
         }
     }
 
+    /**
+     *
+     * @param roomName
+     * @param roomSettings
+     * @param login
+     * @return
+     */
     public Response createRoom(String roomName, GameSettings roomSettings, String login) {
         GameControllerFactory gameControllerFactory = new GameControllerFactory();
         GameController gameController = gameControllerFactory.createGameControler(this, roomSettings, login);
@@ -42,6 +54,11 @@ public class Server implements GameServer {
         return new Response(Response.Type.SUCCESS);
     }
 
+    /**
+     *
+     * @param action
+     * @return
+     */
     public Response handleGameAction (GameAction action) {
         Player player = getPlayer(action.getSender(), false);
         if (player == null) return new Response(Response.Type.FAILURE, "Not logged in");
@@ -50,6 +67,10 @@ public class Server implements GameServer {
         return response;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<GameInfo> getRoomList() {
         List<GameInfo> roomList = new ArrayList<GameInfo>();
         for (GameController c : controllers) {
@@ -58,6 +79,12 @@ public class Server implements GameServer {
         return roomList;
     }
 
+    /**
+     *
+     * @param login
+     * @param create
+     * @return
+     */
     private Player getPlayer(String login, boolean create) {
         for (Player c : players.keySet())
             if (c.getName() == login) return c;
@@ -69,11 +96,20 @@ public class Server implements GameServer {
         }
     }
 
+    /**
+     *
+     * @param gameController
+     * @param gameState
+     */
     @Override
     public void sendToAll(GameController gameController, GameState gameState) {
 
     }
 
+    /**
+     * 
+     * @param gameController
+     */
     @Override
     public void finishGame(GameController gameController) {
 
