@@ -1,13 +1,12 @@
 package to2.dice.server;
 
 import to2.dice.controllers.GameController;
-import to2.dice.controllers.IGameControllerFactory;
+import to2.dice.controllers.GameControllerFactory;
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameState;
 import to2.dice.game.Player;
 import to2.dice.messaging.GameAction;
-import to2.dice.messaging.GameActionType;
 import to2.dice.messaging.Response;
 
 import java.util.*;
@@ -34,10 +33,9 @@ public class Server implements GameServer {
         }
     }
 
-    //nie bangla
     public Response createRoom(String roomName, GameSettings roomSettings, String login) {
-        IGameControllerFactory gameControllerFactory = new IGameControllerFactory();
-        GameController gameController = gameControllerFactory.createGameControler(this, roomSettings);
+        GameControllerFactory gameControllerFactory = new GameControllerFactory();
+        GameController gameController = gameControllerFactory.createGameControler(this, roomSettings, login);
         for (GameController c : controllers)
             if (c.getGameInfo().getSettings().getName().equals(gameController.getGameInfo().getSettings().getName())) return new Response(Response.Type.FAILURE);
         controllers.add(gameController);
