@@ -1,7 +1,11 @@
 package to2.dice.server;
 
 import org.junit.Test;
+import to2.dice.controllers.GameController;
+import to2.dice.controllers.GameControllerFactory;
+import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
+import to2.dice.game.GameState;
 import to2.dice.game.GameType;
 import to2.dice.messaging.Response;
 import static org.junit.Assert.*;
@@ -23,10 +27,10 @@ public class ServerTest {
         responses[2] = server.login("Januszek");
         responses[3] = server.login("Janusz");
 
-        assertEquals("Response r1 = server.login(null) has type SUCCESS", responses[0].type, Response.Type.SUCCESS);
-        assertEquals("Response r2 = server.login(\"Janusz\") has type SUCCESS", responses[1].type, Response.Type.SUCCESS);
-        assertEquals("Response r3 = server.login(\"Januszek\") has type SUCCESS", responses[2].type, Response.Type.SUCCESS);
-        assertEquals("Response r4 = server.login(\"Janusz\") has type FAILURE", responses[3].type, Response.Type.FAILURE);
+        assertEquals("Response responses[0] = server.login(null) has type SUCCESS", responses[0].type, Response.Type.SUCCESS);
+        assertEquals("Response responses[1] = server.login(\"Janusz\") has type SUCCESS", responses[1].type, Response.Type.SUCCESS);
+        assertEquals("Response responses[2] = server.login(\"Januszek\") has type SUCCESS", responses[2].type, Response.Type.SUCCESS);
+        assertEquals("Response responses[3] = server.login(\"Janusz\") has type FAILURE", responses[3].type, Response.Type.FAILURE);
     }
 
     @Test
@@ -36,10 +40,21 @@ public class ServerTest {
         roomNames[1] = "Gwozdziec";
         roomNames[2] = "Sosnowiec";
 
-        GameSettings roomSettings = mock (GameSettings.class);
-
-        System.out.println(roomSettings.getGameType());
+        GameSettings settingsMock = mock(GameSettings.class);
+        when(settingsMock.getGameType()).thenReturn(GameType.POKER);
 
         String creator = "Alfons";
+
+        Response [] responses = new Response[3];
+
+        GameState gameState = new GameState();
+        GameInfo gameInfo = new GameInfo(settingsMock, gameState);
+
+        GameController gameControllerMock = mock(GameController.class);
+        when(gameControllerMock.getGameInfo()).thenReturn(gameInfo);
+
+        responses[0] = server.createRoom(roomNames[0], settingsMock, creator);
+        responses[1] = server.createRoom(roomNames[1], settingsMock, creator);
+        responses[2] = server.createRoom(roomNames[2], settingsMock, creator);
     }
 }
