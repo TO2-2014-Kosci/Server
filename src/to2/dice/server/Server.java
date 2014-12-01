@@ -24,8 +24,8 @@ public class Server implements GameServer {
 
     /**
      * Create a new player with parameter login as a player's name
-     * @param login - name of created player
-     * @return - appropriate type of Response
+     * @param login name of created player
+     * @return appropriate type of Response
      */
     public Response login (String login) {
         if (players.containsKey(login)) {
@@ -38,10 +38,10 @@ public class Server implements GameServer {
 
     /**
      * Create a new instance of GameController using GameControllerFactory
-     * @param roomName - name of created room
-     * @param roomSettings - settings of created room
-     * @param creator - name of the first player in the room
-     * @return - appropriate type of Response
+     * @param roomName name of created room
+     * @param roomSettings settings of created room
+     * @param creator name of the first player in the room
+     * @return appropriate type of Response
      */
     public Response createRoom(String roomName, GameSettings roomSettings, String creator) {
         GameControllerFactory gameControllerFactory = new GameControllerFactory();
@@ -54,8 +54,8 @@ public class Server implements GameServer {
 
     /**
      * Perform action (instance of GameAction) of appropriate type
-     * @param action - parameters of performed action
-     * @return - appropriate type of Response
+     * @param action parameters of performed action
+     * @return appropriate type of Response
      */
     public Response handleGameAction (GameAction action) {
         GameController gameController = players.get(action.getSender());
@@ -65,7 +65,7 @@ public class Server implements GameServer {
 
     /**
      * Get the GameInfo from controllers and return as a list.
-     * @return - new List of GameInfo
+     * @return new List of GameInfo
      */
     public List<GameInfo> getRoomList() {
         List<GameInfo> roomList = new ArrayList<GameInfo>();
@@ -77,8 +77,8 @@ public class Server implements GameServer {
 
     /**
      * Send gameState to all players who are in the selected room.
-     * @param gameController - instance of GameController where there are players to whom we send gameState
-     * @param gameState - message that is sending to players
+     * @param gameController instance of GameController where there are players to whom we send gameState
+     * @param gameState message that is sending to players
      */
     @Override
     public void sendToAll(GameController gameController, GameState gameState) {
@@ -87,7 +87,7 @@ public class Server implements GameServer {
 
     /**
      * Remove finished game.
-     * @param gameController - finished game
+     * @param gameController finished game
      */
     @Override
     public void finishGame(GameController gameController) {
