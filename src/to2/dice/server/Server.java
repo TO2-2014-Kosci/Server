@@ -33,7 +33,7 @@ public class Server implements GameServer {
             return new Response(Response.Type.FAILURE, "Login can't be blank");
 
         if (players.containsKey(login)) {
-            return new Response(Response.Type.FAILURE);
+            return new Response(Response.Type.FAILURE, "Login is not unique");
         } else {
             players.put(login, null);
             return new Response(Response.Type.SUCCESS);
