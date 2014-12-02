@@ -98,10 +98,6 @@ public class Server implements GameServer {
     @Override
     public void finishGame(GameController gameController) {
         //TODO Sending information to players
-        for (GameController c : controllers)
-            if (c.getGameInfo().getSettings().getName().equals(gameController.getGameInfo().getSettings().getName())) {
-                controllers.remove(c);
-                return;
-            }
+        controllers.remove(gameController);
     }
 }
