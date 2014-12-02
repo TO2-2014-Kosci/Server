@@ -10,7 +10,10 @@ import to2.dice.controllers.GameControllerFactory;
 import to2.dice.game.*;
 import to2.dice.messaging.Response;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -38,6 +41,26 @@ public class ServerCreateRoomTest {
         set = createSet("Sosnowiec");
         response = server.createRoom(set.gset, "Alfons");
         assertEquals("Create room with not unique name", response.type, Response.Type.FAILURE);
+    }
+
+    @Test
+    public void testGetRoomList() throws Exception {
+        ControllerMockSet[] sets = new ControllerMockSet[3];
+
+        sets[0] = createSet("Sosnowiec");
+        server.createRoom(sets[0].gset, "Alfons");
+
+        sets[1] = createSet("Tarzymiechy Srednie");
+        server.createRoom(sets[1].gset, "Alfons");
+
+        sets[2] = createSet("Gwozdziec");
+        server.createRoom(sets[2].gset, "Alfons");
+
+        List<GameInfo> rooms = server.getRoomList();
+
+        assertTrue("Show all rooms", rooms.contains(sets[0].gi));
+        assertTrue("Show all rooms", rooms.contains(sets[1].gi));
+        assertTrue("Show all rooms", rooms.contains(sets[2].gi));
     }
 
     class ControllerMockSet {

@@ -41,7 +41,7 @@ public final class RequestSerializer {
                 boolean[] dice = new boolean[diceArray.length()];
                 for (int i = 0; i < dice.length; i++)
                     dice[i] = diceArray.getBoolean(i);
-                return new RerollAction(type, host, dice);
+                return new RerollAction(host, dice);
             default:
                 return new GameAction(type, host);
         }

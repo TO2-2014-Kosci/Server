@@ -1,5 +1,6 @@
 package to2.dice.server;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import to2.dice.controllers.GameController;
 import to2.dice.controllers.GameControllerFactory;
 import to2.dice.game.GameInfo;
@@ -87,7 +88,7 @@ public class Server implements GameServer {
      */
     @Override
     public void sendToAll(GameController gameController, GameState gameState) {
-
+        throw new NotImplementedException();
     }
 
     /**
@@ -96,6 +97,7 @@ public class Server implements GameServer {
      */
     @Override
     public void finishGame(GameController gameController) {
+        //TODO Sending information to players
         for (GameController c : controllers)
             if (c.getGameInfo().getSettings().getName().equals(gameController.getGameInfo().getSettings().getName())) {
                 controllers.remove(c);
