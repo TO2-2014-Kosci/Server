@@ -27,7 +27,10 @@ public class Server implements GameServer {
      * @param login name of created player
      * @return appropriate type of Response
      */
-    public Response login (String login) {
+    public Response login(String login) {
+        if (login == null || login.replaceAll(" ", "").length() == 0)
+            return new Response(Response.Type.FAILURE, "Login can't be blank");
+
         if (players.containsKey(login)) {
             return new Response(Response.Type.FAILURE);
         } else {
@@ -38,15 +41,18 @@ public class Server implements GameServer {
 
     /**
      * Create a new instance of GameController using GameControllerFactory
-     * @param roomName name of created room
      * @param roomSettings settings of created room
      * @param creator name of the first player in the room
      * @return appropriate type of Response
      */
-    public Response createRoom(String roomName, GameSettings roomSettings, String creator) {
-        GameController gameController = GameControllerFactory.createGameControler(this, roomSettings, creator);
+    public Response createRoom(GameSettings roomSettings, String creator) {
+        String newName = roomSettings.getName();
+
         for (GameController c : controllers)
-            if (c.getGameInfo().getSettings().getName().equals(gameController.getGameInfo().getSettings().getName())) return new Response(Response.Type.FAILURE);
+            if (c.getGameInfo().getSettings().getName().equals(newName))
+                return new Response(Response.Type.FAILURE, String.format("Game room with name %s already exists", newName));
+
+        GameController gameController = GameControllerFactory.createGameControler(this, roomSettings, creator);
         controllers.add(gameController);
         return new Response(Response.Type.SUCCESS);
     }
@@ -56,7 +62,7 @@ public class Server implements GameServer {
      * @param action parameters of performed action
      * @return appropriate type of Response
      */
-    public Response handleGameAction (GameAction action) {
+    public Response handleGameAction(GameAction action) {
         GameController gameController = players.get(action.getSender());
         Response response = gameController.handleGameAction(action);
         return response;
