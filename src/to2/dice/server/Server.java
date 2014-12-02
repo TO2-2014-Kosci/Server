@@ -44,8 +44,7 @@ public class Server implements GameServer {
      * @return appropriate type of Response
      */
     public Response createRoom(String roomName, GameSettings roomSettings, String creator) {
-        GameControllerFactory gameControllerFactory = new GameControllerFactory();
-        GameController gameController = gameControllerFactory.createGameControler(this, roomSettings, creator);
+        GameController gameController = GameControllerFactory.createGameControler(this, roomSettings, creator);
         for (GameController c : controllers)
             if (c.getGameInfo().getSettings().getName().equals(gameController.getGameInfo().getSettings().getName())) return new Response(Response.Type.FAILURE);
         controllers.add(gameController);

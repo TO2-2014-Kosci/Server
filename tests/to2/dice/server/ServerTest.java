@@ -1,6 +1,7 @@
 package to2.dice.server;
 
 import org.junit.Test;
+import org.powermock.api.mockito.PowerMockito;
 import to2.dice.controllers.GameController;
 import to2.dice.controllers.GameControllerFactory;
 import to2.dice.game.GameInfo;
@@ -14,6 +15,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Janusz on 01-12-2014.
  */
+
 public class ServerTest {
 
     Server server = new Server();
@@ -52,6 +54,12 @@ public class ServerTest {
 
         GameController gameControllerMock = mock(GameController.class);
         when(gameControllerMock.getGameInfo()).thenReturn(gameInfo);
+
+        //PowerMockito.mockStatic(ClassWithStatics.class);
+        //when(ClassWithStatics.getString()).thenReturn("Hello!");
+
+        PowerMockito.mock(GameControllerFactory.class);
+        //PowerMockito.when(GameControllerFactory.createGameControler(server, settingsMock, creator)).thenReturn(gameControllerMock);
 
         responses[0] = server.createRoom(roomNames[0], settingsMock, creator);
         responses[1] = server.createRoom(roomNames[1], settingsMock, creator);
