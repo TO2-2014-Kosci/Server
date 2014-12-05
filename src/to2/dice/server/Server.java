@@ -16,11 +16,12 @@ import java.util.*;
  */
 
 public class Server implements GameServer {
-    HashMap<String, GameController> players = new HashMap<String, GameController>();
-    Set<GameController> controllers = new HashSet<GameController>();
+    HashMap<String, GameController> players;
+    Set<GameController> controllers;
 
     public Server() {
-
+        players = new HashMap<String, GameController>();
+        controllers = new HashSet<GameController>();
     }
 
     /**
