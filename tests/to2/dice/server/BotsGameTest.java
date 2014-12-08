@@ -1,5 +1,6 @@
 package to2.dice.server;
 
+import org.junit.Test;
 import to2.dice.game.BotLevel;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameType;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 public class BotsGameTest {
     HashMap<BotLevel, Integer> botsNumber;
 
+    @Test
     public void run() {
         botsNumber.put(BotLevel.HIGH, 0);
         botsNumber.put(BotLevel.HIGH, 1);
