@@ -6,6 +6,9 @@ import to2.dice.game.GameType;
 
 import java.util.HashMap;
 
+/**
+ * Created by Janusz on 05-12-2014.
+ */
 public class BotsGameTest {
     HashMap<BotLevel, Integer> botsNumber;
 
