@@ -15,8 +15,6 @@ import java.util.List;
 public class LocalConnectionProxy extends ConnectionProxy {
 
     private Server server;
-    private List<ServerMessageListener> listeners;
-
 
     public LocalConnectionProxy(Object serverLink, ServerMessageListener listener) {
         super(serverLink, listener);
@@ -69,14 +67,13 @@ public class LocalConnectionProxy extends ConnectionProxy {
 
     @Override
     protected boolean connect(Object serverLink) {
-        this.server = (Server)serverLink;
+        this.server = (Server) serverLink;
 
         return this.server != null;
     }
 
     @Override
     public void addServerMessageListener(ServerMessageListener listener) {
-        listeners = new ArrayList<ServerMessageListener>();
         listeners.add(listener);
     }
 }
