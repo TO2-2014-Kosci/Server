@@ -51,6 +51,9 @@ public class Server implements GameServer {
      * @return appropriate type of Response
      */
     public Response createRoom(GameSettings roomSettings, String creator) {
+        if (!players.keySet().contains(creator))
+            return new Response(Response.Type.FAILURE, String.format("User %s not logged in", creator));
+
         String newName = roomSettings.getName();
 
         for (GameController c : controllers)
@@ -59,6 +62,8 @@ public class Server implements GameServer {
 
         GameController gameController = GameControllerFactory.createGameControler(this, roomSettings, creator);
         controllers.add(gameController);
+        players.put(creator, gameController);
+
         return new Response(Response.Type.SUCCESS);
     }
 
@@ -69,6 +74,10 @@ public class Server implements GameServer {
      */
     public Response handleGameAction(GameAction action) {
         GameController gameController = players.get(action.getSender());
+
+        if (gameController == null)
+            return new Response(Response.Type.FAILURE, "User is not in any room");
+
         Response response = gameController.handleGameAction(action);
         return response;
     }
