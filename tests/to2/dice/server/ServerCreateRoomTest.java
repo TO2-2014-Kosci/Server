@@ -30,6 +30,8 @@ public class ServerCreateRoomTest {
         ControllerMockSet set;
         Response response;
 
+        server.login("Alfons");
+
         set = createSet("Sosnowiec");
         response = server.createRoom(set.gset, "Alfons");
         assertEquals("Create room with unique name", response.type, Response.Type.SUCCESS);

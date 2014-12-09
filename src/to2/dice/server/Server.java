@@ -61,6 +61,10 @@ public class Server implements GameServer {
                 return new Response(Response.Type.FAILURE, String.format("Game room with name %s already exists", newName));
 
         GameController gameController = GameControllerFactory.createGameControler(this, roomSettings, creator);
+
+        if (gameController == null)
+            return new Response(Response.Type.FAILURE, "Failed to create game room");
+
         controllers.add(gameController);
         players.put(creator, gameController);
 
