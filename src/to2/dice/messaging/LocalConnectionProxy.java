@@ -2,6 +2,7 @@ package to2.dice.messaging;
 
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
+import to2.dice.game.GameState;
 import to2.dice.server.ConnectionProxy;
 import to2.dice.server.Server;
 import to2.dice.server.ServerMessageListener;
@@ -67,7 +68,8 @@ public class LocalConnectionProxy extends ConnectionProxy {
 
     @Override
     protected boolean connect(Object serverLink) {
-        this.server = (Server) serverLink;
+        server = (Server) serverLink;
+        server.registerLocalProxy(this);
 
         return this.server != null;
     }
@@ -75,5 +77,10 @@ public class LocalConnectionProxy extends ConnectionProxy {
     @Override
     public void addServerMessageListener(ServerMessageListener listener) {
         listeners.add(listener);
+    }
+
+    public void sendState(GameState s) {
+        for (ServerMessageListener sml : listeners)
+            sml.onGameStateChange(s);
     }
 }

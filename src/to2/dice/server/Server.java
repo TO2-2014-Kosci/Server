@@ -7,6 +7,7 @@ import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameState;
 import to2.dice.messaging.GameAction;
+import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
 import java.util.*;
@@ -18,10 +19,12 @@ import java.util.*;
 public class Server implements GameServer {
     HashMap<String, GameController> players;
     Set<GameController> controllers;
+    Set<LocalConnectionProxy> localProxies;
 
     public Server() {
         players = new HashMap<String, GameController>();
         controllers = new HashSet<GameController>();
+        localProxies = new HashSet<LocalConnectionProxy>();
     }
 
     /**
@@ -82,6 +85,10 @@ public class Server implements GameServer {
         return roomList;
     }
 
+    public void registerLocalProxy(LocalConnectionProxy lcp) {
+        localProxies.add(lcp);
+    }
+
     /**
      * Send gameState to all players who are in the selected room.
      * @param gameController instance of GameController where there are players to whom we send gameState
@@ -89,7 +96,10 @@ public class Server implements GameServer {
      */
     @Override
     public void sendToAll(GameController gameController, GameState gameState) {
-        throw new NotImplementedException();
+        for (LocalConnectionProxy lcp : localProxies)
+            lcp.sendState(gameState);
+
+        // TODO Remote
     }
 
     /**
@@ -99,6 +109,7 @@ public class Server implements GameServer {
     @Override
     public void finishGame(GameController gameController) {
         //TODO Sending information to players
+
         controllers.remove(gameController);
     }
 }
