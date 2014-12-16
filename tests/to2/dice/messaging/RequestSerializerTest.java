@@ -23,12 +23,12 @@ public class RequestSerializerTest {
         String json = RequestSerializer.serializeBots(bots).toString();
 
         assertEquals("Creates proper json string",
-                "{\"HIGH\":5}", json);
+                "{\"HARD\":5}", json);
     }
 
     @Test
     public void testDeserializeBots() throws Exception {
-        String json = "{\"HIGH\":3,\"LOW\":8}";
+        String json = "{\"HIGH\":3,\"EASY\":8}";
         Map<BotLevel, Integer> bots = RequestSerializer.deserializeBots(new JSONObject(json));
 
         assertEquals("Has accurate number of difficult bots",
