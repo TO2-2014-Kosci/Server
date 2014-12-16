@@ -109,6 +109,10 @@ public class Server implements GameServer {
         return roomList;
     }
 
+    /**
+     * Register Local Proxy
+     * @param lcp new LCP
+     */
     public void registerLocalProxy(LocalConnectionProxy lcp) {
         localProxies.add(lcp);
     }
