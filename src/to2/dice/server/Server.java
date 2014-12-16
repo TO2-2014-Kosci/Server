@@ -6,9 +6,7 @@ import to2.dice.controllers.GameControllerFactory;
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameState;
-import to2.dice.messaging.GameAction;
-import to2.dice.messaging.LocalConnectionProxy;
-import to2.dice.messaging.Response;
+import to2.dice.messaging.*;
 
 import java.util.*;
 
@@ -77,7 +75,20 @@ public class Server implements GameServer {
      * @return appropriate type of Response
      */
     public Response handleGameAction(GameAction action) {
-        GameController gameController = players.get(action.getSender());
+        GameController gameController = null;
+
+        if (action.getType() == GameActionType.JOIN_ROOM) {
+            JoinRoomAction jra = (JoinRoomAction)action;
+            for (GameController gc : controllers) {
+                if (gc.getGameInfo().getSettings().getName().equals(jra.getGameRoom())) {
+                    gameController = gc;
+                    players.put(jra.getSender(), gc);
+                    break;
+                }
+            }
+        }
+        else
+            gameController = players.get(action.getSender());
 
         if (gameController == null)
             return new Response(Response.Type.FAILURE, "User is not in any room");

@@ -43,7 +43,7 @@ public class LocalConnectionProxy implements ConnectionProxy {
 
     @Override
     public Response joinRoom(String roomName) {
-        GameAction action = new GameAction(GameActionType.JOIN_ROOM, loggedInUser);
+        GameAction action = new JoinRoomAction(loggedInUser, roomName);
         return this.server.handleGameAction(action);
     }
 
