@@ -23,6 +23,7 @@ public class LocalConnectionProxy implements ConnectionProxy {
     public LocalConnectionProxy(Object serverLink, ServerMessageListener listener) {
         listeners = new ArrayList<ServerMessageListener>();
         connect(serverLink);
+        addServerMessageListener(listener);
     }
 
     @Override
