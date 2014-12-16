@@ -7,6 +7,7 @@ import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameState;
 import to2.dice.messaging.GameAction;
+import to2.dice.messaging.GameActionType;
 import to2.dice.messaging.LocalConnectionProxy;
 import to2.dice.messaging.Response;
 
@@ -79,7 +80,7 @@ public class Server implements GameServer {
     public Response handleGameAction(GameAction action) {
         GameController gameController = players.get(action.getSender());
 
-        if (gameController == null)
+        if (gameController == null && action.getType() != GameActionType.JOIN_ROOM)
             return new Response(Response.Type.FAILURE, "User is not in any room");
 
         Response response = gameController.handleGameAction(action);
