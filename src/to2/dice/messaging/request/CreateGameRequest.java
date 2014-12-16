@@ -1,4 +1,4 @@
-package to2.dice.messaging;
+package to2.dice.messaging.request;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

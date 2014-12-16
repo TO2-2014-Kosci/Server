@@ -4,6 +4,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import to2.dice.game.GameSettings;
+import to2.dice.messaging.request.Request;
+import to2.dice.messaging.request.RequestBuilder;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

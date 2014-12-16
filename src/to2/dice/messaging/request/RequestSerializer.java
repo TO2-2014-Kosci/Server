@@ -1,10 +1,13 @@
-package to2.dice.messaging;
+package to2.dice.messaging.request;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import to2.dice.game.BotLevel;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameType;
+import to2.dice.messaging.GameAction;
+import to2.dice.messaging.GameActionType;
+import to2.dice.messaging.RerollAction;
 
 import java.util.Collection;
 import java.util.HashMap;
