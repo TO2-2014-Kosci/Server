@@ -17,8 +17,8 @@ public class RequestSerializerTest {
     @Test
     public void testSerializeBots() throws Exception {
         Map<BotLevel, Integer> bots = new HashMap<BotLevel, Integer>();
-        bots.put(BotLevel.HIGH, 5);
-        bots.put(BotLevel.LOW, 0);
+        bots.put(BotLevel.HARD, 5);
+        bots.put(BotLevel.EASY, 0);
 
         String json = RequestSerializer.serializeBots(bots).toString();
 
@@ -32,9 +32,9 @@ public class RequestSerializerTest {
         Map<BotLevel, Integer> bots = RequestSerializer.deserializeBots(new JSONObject(json));
 
         assertEquals("Has accurate number of difficult bots",
-                (int) bots.get(BotLevel.HIGH), 3);
+                (int) bots.get(BotLevel.HARD), 3);
         assertEquals("Has accurate number of easy bots",
-                (int) bots.get(BotLevel.LOW), 8);
+                (int) bots.get(BotLevel.EASY), 8);
     }
 
     @Test

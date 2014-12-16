@@ -22,8 +22,8 @@ public class BotsGameTest {
     public void botGameTest() throws Exception {
         HashMap<BotLevel, Integer> botsNumber = new HashMap<BotLevel, Integer>();
 
-        botsNumber.put(BotLevel.HIGH, 3);
-        botsNumber.put(BotLevel.LOW, 8);
+        botsNumber.put(BotLevel.HARD, 3);
+        botsNumber.put(BotLevel.EASY, 8);
         GameSettings gameSettings = new GameSettings(GameType.POKER, 5, "Slupsk", 0, 20, 3, 3, botsNumber);
 
         GameServer server = new GameServer() {
