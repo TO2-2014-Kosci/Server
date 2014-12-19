@@ -150,7 +150,7 @@ public class Server implements GameServer {
 
         for (String player : players.keySet()) {
             curr = players.get(player);
-            if (curr.equals(room))
+            if (curr != null && curr.equals(room))
                 result.add(player);
         }
 

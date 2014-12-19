@@ -49,14 +49,16 @@ public class ServerCreateRoomTest {
     public void testGetRoomList() throws Exception {
         ControllerMockSet[] sets = new ControllerMockSet[3];
 
+        server.login("Alfons");
+
         sets[0] = createSet("Sosnowiec");
-        server.createRoom(sets[0].gset, "Alfons");
+        assertTrue(server.createRoom(sets[0].gset, "Alfons").isSuccess());
 
         sets[1] = createSet("Tarzymiechy Srednie");
-        server.createRoom(sets[1].gset, "Alfons");
+        assertTrue(server.createRoom(sets[1].gset, "Alfons").isSuccess());
 
         sets[2] = createSet("Gwozdziec");
-        server.createRoom(sets[2].gset, "Alfons");
+        assertTrue(server.createRoom(sets[2].gset, "Alfons").isSuccess());
 
         List<GameInfo> rooms = server.getRoomList();
 
