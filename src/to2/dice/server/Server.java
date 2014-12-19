@@ -1,6 +1,5 @@
 package to2.dice.server;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import to2.dice.controllers.GameController;
 import to2.dice.controllers.GameControllerFactory;
 import to2.dice.game.GameInfo;
