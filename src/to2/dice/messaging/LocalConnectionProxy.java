@@ -74,9 +74,11 @@ public class LocalConnectionProxy implements ConnectionProxy {
 
     protected boolean connect(Object serverLink) {
         server = (Server) serverLink;
-        server.registerLocalProxy(this);
+        if (server == null)
+            return false;
 
-        return this.server != null;
+        server.registerLocalProxy(this);
+        return true;
     }
 
     @Override
@@ -87,5 +89,9 @@ public class LocalConnectionProxy implements ConnectionProxy {
     public void sendState(GameState s) {
         for (ServerMessageListener sml : listeners)
             sml.onGameStateChange(s);
+    }
+
+    public String getLoggedInUser() {
+        return loggedInUser;
     }
 }

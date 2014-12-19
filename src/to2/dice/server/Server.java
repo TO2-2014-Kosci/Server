@@ -124,8 +124,12 @@ public class Server implements GameServer {
      */
     @Override
     public void sendToAll(GameController gameController, GameState gameState) {
-        for (LocalConnectionProxy lcp : localProxies)
-            lcp.sendState(gameState);
+        List<String> players = playersInRoom(gameController);
+
+        for (LocalConnectionProxy lcp : localProxies) {
+            if (players.contains(lcp.getLoggedInUser()))
+                lcp.sendState(gameState);
+        }
 
         // TODO Remote
     }
@@ -139,5 +143,18 @@ public class Server implements GameServer {
         //TODO Sending information to players
 
         controllers.remove(gameController);
+    }
+
+    private List<String> playersInRoom(GameController room) {
+        ArrayList<String> result = new ArrayList<String>(this.players.size() / this.controllers.size());
+        GameController curr = null;
+
+        for (String player : players.keySet()) {
+            curr = players.get(player);
+            if (curr.equals(room))
+                result.add(player);
+        }
+
+        return result;
     }
 }
