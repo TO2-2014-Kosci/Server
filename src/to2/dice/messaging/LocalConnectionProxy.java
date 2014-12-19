@@ -22,19 +22,69 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
     }
 
     @Override
-    public Response login(String login) throws TimeoutException {
+    public Response login(String login) {
         this.loggedInUser = login;
         return server.login(login);
     }
 
     @Override
-    public List<GameInfo> getRoomList() throws TimeoutException {
+    public List<GameInfo> getRoomList() {
         return server.getRoomList();
     }
 
     @Override
-    public Response createRoom(GameSettings settings) throws TimeoutException {
+    public Response createRoom(GameSettings settings) {
         return server.createRoom(settings, this.loggedInUser);
+    }
+
+    @Override
+    public Response joinRoom(String roomName) {
+        try {
+            return super.joinRoom(roomName);
+        }
+        finally {
+            return new Response(Response.Type.FAILURE, "Unknown error");
+        }
+    }
+
+    @Override
+    public Response leaveRoom() {
+        try {
+            return super.leaveRoom();
+        }
+        finally {
+            return new Response(Response.Type.FAILURE, "Unknown error");
+        }
+    }
+
+    @Override
+    public Response sitDown() {
+        try {
+            return super.sitDown();
+        }
+        finally {
+            return new Response(Response.Type.FAILURE, "Unknown error");
+        }
+    }
+
+    @Override
+    public Response standUp() {
+        try {
+            return super.standUp();
+        }
+        finally {
+            return new Response(Response.Type.FAILURE, "Unknown error");
+        }
+    }
+
+    @Override
+    public Response reroll(boolean[] dice) {
+        try {
+            return super.reroll(dice);
+        }
+        finally {
+            return new Response(Response.Type.FAILURE, "Unknown error");
+        }
     }
 
     @Override
