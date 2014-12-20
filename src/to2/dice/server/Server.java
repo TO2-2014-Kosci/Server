@@ -142,10 +142,16 @@ public class Server implements GameServer {
         //TODO Sending information to players
 
         controllers.remove(gameController);
+        for (String player : players.keySet())
+            if (players.get(player).equals(gameController))
+                players.put(player, null);
     }
 
     private List<String> playersInRoom(GameController room) {
-        ArrayList<String> result = new ArrayList<String>(this.players.size() / this.controllers.size());
+        if (this.controllers.size() == 0) return new ArrayList<String>();
+
+        int initial = this.players.size() / this.controllers.size();
+        ArrayList<String> result = new ArrayList<String>(initial);
         GameController curr = null;
 
         for (String player : players.keySet()) {
