@@ -42,7 +42,7 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
         try {
             return super.joinRoom(roomName);
         }
-        catch(Exception e) {
+        catch(TimeoutException e) {
             return new Response(Response.Type.FAILURE, "Unknown error");
         }
     }
@@ -52,7 +52,7 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
         try {
             return super.leaveRoom();
         }
-        catch(Exception e) {
+        catch(TimeoutException e) {
             return new Response(Response.Type.FAILURE, "Unknown error");
         }
     }
@@ -62,7 +62,7 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
         try {
             return super.sitDown();
         }
-        catch(Exception e) {
+        catch(TimeoutException e) {
             return new Response(Response.Type.FAILURE, "Unknown error");
         }
     }
@@ -72,7 +72,7 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
         try {
             return super.standUp();
         }
-        catch(Exception e) {
+        catch(TimeoutException e) {
             return new Response(Response.Type.FAILURE, "Unknown error");
         }
     }
@@ -82,7 +82,7 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
         try {
             return super.reroll(dice);
         }
-        catch(Exception e) {
+        catch(TimeoutException e) {
             return new Response(Response.Type.FAILURE, "Unknown error");
         }
     }
