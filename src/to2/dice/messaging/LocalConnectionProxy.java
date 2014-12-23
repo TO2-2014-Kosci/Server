@@ -106,4 +106,12 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
         for (ServerMessageListener sml : listeners)
             sml.onGameStateChange(s);
     }
+
+    /**
+     * for debugging purposes
+     * @param login login to set
+     */
+    public void setLoggedInUser(String login) {
+        this.loggedInUser = login;
+    }
 }

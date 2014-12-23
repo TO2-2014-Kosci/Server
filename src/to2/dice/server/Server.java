@@ -143,7 +143,7 @@ public class Server implements GameServer {
 
         controllers.remove(gameController);
         for (String player : players.keySet())
-            if (players.get(player).equals(gameController))
+            if (players.get(player) != null && players.get(player).equals(gameController))
                 players.put(player, null);
     }
 
