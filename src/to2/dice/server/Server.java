@@ -18,10 +18,15 @@ public class Server implements GameServer {
     Set<GameController> controllers;
     Set<LocalConnectionProxy> localProxies;
 
+    MessageServer messageServer;
+
     public Server() {
         players = new HashMap<String, GameController>();
         controllers = new HashSet<GameController>();
         localProxies = new HashSet<LocalConnectionProxy>();
+
+        messageServer = new MessageServer(this);
+        messageServer.run();
     }
 
     /**
@@ -97,6 +102,11 @@ public class Server implements GameServer {
         GameController gameController = null;
 
         if (action.getType() == GameActionType.JOIN_ROOM) {
+            GameController controller;
+            if ((controller = players.get(action.getSender())) != null)
+                return new Response(Response.Type.FAILURE,
+                        String.format("You are already in room %s", controller.getGameInfo().getSettings().getName()));
+
             JoinRoomAction jra = (JoinRoomAction)action;
             for (GameController gc : controllers) {
                 if (gc.getGameInfo().getSettings().getName().equals(jra.getGameRoom())) {
@@ -113,6 +123,9 @@ public class Server implements GameServer {
             return new Response(Response.Type.FAILURE, "User is not in any room");
 
         Response response = gameController.handleGameAction(action);
+        if (response.isSuccess() && action.getType() == GameActionType.LEAVE_ROOM)
+            players.put(action.getSender(), null);
+
         return response;
     }
 
@@ -150,7 +163,7 @@ public class Server implements GameServer {
                 lcp.sendState(gameState);
         }
 
-        // TODO Remote
+        messageServer.pushState(gameController, gameState); // TODO Remote
     }
 
     /**
@@ -172,7 +185,7 @@ public class Server implements GameServer {
 
         int initial = this.players.size() / this.controllers.size();
         ArrayList<String> result = new ArrayList<String>(initial);
-        GameController curr = null;
+        GameController curr;
 
         for (String player : players.keySet()) {
             curr = players.get(player);
