@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Janusz on 01-12-2014.
  */
-public class ServerTest {
+public class LoginTest {
 
     Server server = new Server();
 
