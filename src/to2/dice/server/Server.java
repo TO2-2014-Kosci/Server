@@ -179,7 +179,6 @@ public class Server implements GameServer {
             if (curr != null && curr.equals(room))
                 result.add(player);
         }
-
         return result;
     }
 }

@@ -10,7 +10,6 @@ import static org.junit.Assert.*;
 public class LogoutTest {
 
     Server server = new Server();
-
     @Test
     public void testLogout() throws Exception {
         Response[] responses = new Response[5];
