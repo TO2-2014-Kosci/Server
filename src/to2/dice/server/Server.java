@@ -42,6 +42,25 @@ public class Server implements GameServer {
     }
 
     /**
+     * Remove existing player from players
+     * @param login name of removed player
+     * @return appropriate type of Response
+     */
+    public Response logout(String login) {
+        if (login == null)
+            return new Response(Response.Type.FAILURE, "Login couldn't be blank");
+        if (players.containsKey(login)) {
+            if (players.get(login)!=null) {
+                //send something to players.get(login)
+            }
+            players.remove(login);
+            return new Response(Response.Type.SUCCESS);
+        } else {
+            return new Response(Response.Type.FAILURE, "Player wasn't signed in");
+        }
+    }
+
+    /**
      * Create a new instance of GameController using GameControllerFactory
      * @param roomSettings settings of created room
      * @param creator name of the first player in the room
