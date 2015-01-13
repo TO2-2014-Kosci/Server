@@ -88,23 +88,22 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
     }
 
     @Override
+    protected void register() {
+        server.registerLocalProxy(this);
+    }
+
+    @Override
     protected boolean connect(Object serverLink) {
         server = (Server) serverLink;
         if (server == null)
             return false;
 
-        server.registerLocalProxy(this);
         return true;
     }
 
     @Override
     protected Response sendGameAction(GameAction action) {
         return server.handleGameAction(action);
-    }
-
-    public void sendState(GameState s) {
-        for (ServerMessageListener sml : listeners)
-            sml.onGameStateChange(s);
     }
 
     /**

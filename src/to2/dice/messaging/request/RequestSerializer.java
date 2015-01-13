@@ -7,6 +7,7 @@ import to2.dice.game.GameSettings;
 import to2.dice.game.GameType;
 import to2.dice.messaging.GameAction;
 import to2.dice.messaging.GameActionType;
+import to2.dice.messaging.JoinRoomAction;
 import to2.dice.messaging.RerollAction;
 
 import java.util.Collection;
@@ -22,11 +23,15 @@ public final class RequestSerializer {
     public static JSONObject serializeGameAction(GameAction action) {
         JSONObject actionObject = new JSONObject();
         actionObject.put("type", action.getType().name())
-                .put("host", action.getSender());
+                .put("sender", action.getSender());
 
         switch (action.getType()) {
             case REROLL:
                 actionObject.put("dice", new JSONArray(((RerollAction) action).getChosenDice()));
+                break;
+            case JOIN_ROOM:
+                actionObject.put("room", ((JoinRoomAction)action).getGameRoom());
+                break;
             default:
                 break;
         }
@@ -34,9 +39,9 @@ public final class RequestSerializer {
         return actionObject;
     }
 
-    public static GameAction GameAction(JSONObject actionObject) {
+    public static GameAction deserializeGameAction(JSONObject actionObject) {
         GameActionType type = GameActionType.valueOf(actionObject.getString("type"));
-        String host = actionObject.getString("host");
+        String sender = actionObject.getString("sender");
 
         switch (type) {
             case REROLL:
@@ -44,9 +49,11 @@ public final class RequestSerializer {
                 boolean[] dice = new boolean[diceArray.length()];
                 for (int i = 0; i < dice.length; i++)
                     dice[i] = diceArray.getBoolean(i);
-                return new RerollAction(host, dice);
+                return new RerollAction(sender, dice);
+            case JOIN_ROOM:
+                return new JoinRoomAction(sender, actionObject.getString("room"));
             default:
-                return new GameAction(type, host);
+                return new GameAction(type, sender);
         }
     }
 

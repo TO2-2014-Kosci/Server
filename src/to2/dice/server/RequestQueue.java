@@ -1,6 +1,9 @@
 package to2.dice.server;
 
 import com.rabbitmq.client.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import to2.dice.messaging.Response;
+import to2.dice.messaging.request.*;
 
 import java.io.IOException;
 
@@ -11,8 +14,8 @@ public class RequestQueue extends Queue {
 
     private final QueueingConsumer consumer;
 
-    public RequestQueue() throws IOException {
-        super();
+    public RequestQueue(Server server, String host) throws IOException {
+        super(server, host);
 
         consumer = new QueueingConsumer(channel);
 
@@ -33,12 +36,38 @@ public class RequestQueue extends Queue {
                         .build();
 
                 String message = new String(delivery.getBody());
-                System.out.println(message); //TODO Handle request
+                Request request = Request.parse(message);
 
-                channel.basicPublish("", props.getReplyTo(), replyProps, "ok".getBytes()); //TODO "ok" -> actual response
-                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                if (request.getType() == Request.Type.GET_ROOM_LIST) {
+                    channel.basicPublish("", props.getReplyTo(), replyProps, ResponseSerializer.serializeRoomList(server.getRoomList()).toString().getBytes());
+                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                }
+                else {
+                    Response response;
+
+                    switch (request.getType()) {
+                        case LOGIN:
+                            LoginRequest loginRequest = (LoginRequest) request;
+                            response = server.login(loginRequest.getLogin());
+                            break;
+                        case CREATE_GAME:
+                            CreateGameRequest createGameRequest = (CreateGameRequest) request;
+                            response = server.createRoom(createGameRequest.getSettings(), createGameRequest.getLogin());
+                            break;
+                        case GAME_ACTION:
+                            GameActionRequest gameActionRequest = (GameActionRequest) request;
+                            response = server.handleGameAction(gameActionRequest.getAction());
+                            break;
+                        default:
+                            throw new NotImplementedException(); //TODO
+                    }
+
+                    channel.basicPublish("", props.getReplyTo(), replyProps, ResponseSerializer.serializeResponse(response).toString().getBytes()); //TODO "ok" -> actual response
+                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                }
             }
             catch (InterruptedException e) {}
+            catch (ShutdownSignalException e) {}
             catch (IOException e) {
                 System.out.println("Niepodziewany błąd podczas wysyłania do kolejki");
                 e.printStackTrace();

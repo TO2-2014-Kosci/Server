@@ -14,22 +14,20 @@ import java.util.concurrent.SynchronousQueue;
  * Created by Fan on 2015-01-09.
  */
 public class MessageServer implements Runnable {
-    private final Server server;
     private final SynchronousQueue<StateMessage> stateMessagesQueue;
 
     private RequestQueue requestQueue;
     private StateQueue stateQueue;
     private Thread requestThread, stateThread;
 
-    public MessageServer(Server server) {
-        this.server = server;
+    public MessageServer(Server server, String queueServer) {
         this.stateMessagesQueue = new SynchronousQueue<StateMessage>();
 
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost(queueServer);
         try {
-            this.requestQueue = new RequestQueue();
-            this.stateQueue = new StateQueue(stateMessagesQueue);
+            this.requestQueue = new RequestQueue(server, queueServer);
+            this.stateQueue = new StateQueue(server, queueServer, stateMessagesQueue);
         }
         catch(IOException e) {
             System.out.println("Niepowodzenie podczas tworzenia kolejek");

@@ -9,7 +9,13 @@ import org.json.JSONObject;
 public class GetRoomListRequest extends Request {
     @Override
     public JSONObject toJson() {
-        return new JSONObject("get_room_list");
+        return new JSONObject().put("get_room_list", "t");
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        if (!json.has("get_room_list"))
+            throw new IllegalArgumentException("Is not valid request");
     }
 
     @Override

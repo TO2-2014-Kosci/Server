@@ -18,23 +18,31 @@ public class BotsGameTest {
     final ArrayList<GameState> states = new ArrayList<GameState>();
     boolean hasEnded = false;
 
-    @Test
+    // @Test
     public void botGameTest() throws Exception {
         HashMap<BotLevel, Integer> botsNumber = new HashMap<BotLevel, Integer>();
 
-        botsNumber.put(BotLevel.HARD, 3);
-        botsNumber.put(BotLevel.EASY, 8);
-        GameSettings gameSettings = new GameSettings(GameType.POKER, 5, "Slupsk", 0, 20, 3, 3, botsNumber);
+        botsNumber.put(BotLevel.HARD, 1);
+        botsNumber.put(BotLevel.EASY, 3);
+        GameSettings gameSettings = new GameSettings(GameType.POKER, 5, "Slupsk", 0, 20, 3, 2, botsNumber);
 
         GameServer server = new GameServer() {
+            private int round = -1;
+
             @Override
             public void sendToAll(GameController sender, GameState state) {
+                if (round != state.getCurrentRound()) {
+                    round = state.getCurrentRound();
+                    System.out.printf("%nRozpoczęto rundę %d ", round);
+                }
                 states.add(state);
+                System.out.print(".");
             }
 
             @Override
             public void finishGame(GameController sender) {
                 hasEnded = true;
+                System.out.println("Zakończono grę");
             }
         };
 

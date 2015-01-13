@@ -10,14 +10,13 @@ import java.io.IOException;
  * Created by Fan on 2015-01-11.
  */
 public abstract class Queue implements Runnable {
+    protected Server server;
     protected Connection connection;
     protected Channel channel;
 
-    public Queue() throws IOException {
-        this("localhost");
-    }
+    public Queue(Server server, String host) throws IOException {
+        this.server = server;
 
-    public Queue(String host) throws IOException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(host);
         connection = factory.newConnection();

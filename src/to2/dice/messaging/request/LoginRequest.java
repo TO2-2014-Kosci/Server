@@ -4,19 +4,25 @@ import org.json.JSONObject;
 
 /**
  * @author Fan
- * @version 0.1
+ * @version 0.2
  */
 public class LoginRequest extends Request {
     protected String login;
 
+    public LoginRequest() {}
     public LoginRequest(String login) {
         this.login = login;
     }
 
     @Override
     public JSONObject toJson() {
-        return new JSONObject("login_request")
-                .put("login", login);
+        return new JSONObject().put("login_request", new JSONObject().put("login", login));
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        json = json.getJSONObject("login_request");
+        login = json.getString("login");
     }
 
     @Override

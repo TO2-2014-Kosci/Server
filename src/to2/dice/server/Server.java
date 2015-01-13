@@ -10,7 +10,8 @@ import to2.dice.messaging.*;
 import java.util.*;
 
 /**
- * Created by Janusz on 30-11-2014.
+ * @author Janusz
+ * @version 0.3
  */
 
 public class Server implements GameServer {
@@ -21,11 +22,15 @@ public class Server implements GameServer {
     MessageServer messageServer;
 
     public Server() {
+        this("localhost");
+    }
+
+    public Server(String queueServer) {
         players = new HashMap<String, GameController>();
         controllers = new HashSet<GameController>();
         localProxies = new HashSet<LocalConnectionProxy>();
 
-        messageServer = new MessageServer(this);
+        messageServer = new MessageServer(this, queueServer);
         messageServer.run();
     }
 
@@ -193,5 +198,9 @@ public class Server implements GameServer {
                 result.add(player);
         }
         return result;
+    }
+
+    public void close() {
+       messageServer.close();
     }
 }

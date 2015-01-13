@@ -2,6 +2,7 @@ package to2.dice.messaging;
 
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
+import to2.dice.game.GameState;
 import to2.dice.server.ConnectionProxy;
 import to2.dice.server.ServerMessageListener;
 
@@ -24,6 +25,7 @@ public abstract class AbstractConnectionProxy implements ConnectionProxy {
         if (!connect(serverLink))
             throw new ConnectException("Could not connect to the server");
 
+        register();
         addServerMessageListener(listener);
     }
 
@@ -68,7 +70,8 @@ public abstract class AbstractConnectionProxy implements ConnectionProxy {
 
     @Override
     public void addServerMessageListener(ServerMessageListener listener) {
-        this.listeners.add(listener);
+        if (listener != null)
+            this.listeners.add(listener);
     }
 
     public String getLoggedInUser() {
@@ -78,7 +81,7 @@ public abstract class AbstractConnectionProxy implements ConnectionProxy {
     /**
      * Registers ConnectionProxy in the Server
      */
-    protected void register() {};
+    protected void register() {}
 
     /**
      * Connects to the server using serverLink
@@ -92,4 +95,9 @@ public abstract class AbstractConnectionProxy implements ConnectionProxy {
      * @return Response from the server indicating successful or failed request
      */
     protected abstract Response sendGameAction(GameAction action);
+
+    public void sendState(GameState state) {
+        for (ServerMessageListener listener : listeners)
+            listener.onGameStateChange(state);
+    }
 }

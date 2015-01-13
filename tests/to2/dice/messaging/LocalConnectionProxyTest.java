@@ -1,5 +1,6 @@
 package to2.dice.messaging;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import to2.dice.game.*;
@@ -36,6 +37,11 @@ public class LocalConnectionProxyTest {
         lcp = new LocalConnectionProxy(server, listener);
         lcp.login(login);
         roomSettings = new GameSettings(GameType.POKER, 5, "roomName", 5, 5, 5, 5, new HashMap<BotLevel, Integer>());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        server.close();
     }
 
     @Test

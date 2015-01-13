@@ -1,6 +1,8 @@
 package to2.dice.server;
 
+import com.rabbitmq.client.ShutdownSignalException;
 import to2.dice.game.GameState;
+import to2.dice.messaging.request.ResponseSerializer;
 
 import java.io.IOException;
 import java.util.concurrent.SynchronousQueue;
@@ -11,8 +13,8 @@ import java.util.concurrent.SynchronousQueue;
 public class StateQueue extends Queue {
     private SynchronousQueue<MessageServer.StateMessage> stateQueue;
 
-    public StateQueue(SynchronousQueue<MessageServer.StateMessage> stateQueue) throws IOException {
-        super();
+    public StateQueue(Server server, String host, SynchronousQueue<MessageServer.StateMessage> stateQueue) throws IOException {
+        super(server, host);
 
         this.stateQueue = stateQueue;
         channel.exchangeDeclare("game_states", "direct");
@@ -26,13 +28,15 @@ public class StateQueue extends Queue {
             try {
                 MessageServer.StateMessage state = stateQueue.take();
                 gameName = state.getGameController().getGameInfo().getSettings().getName();
-                channel.basicPublish("game_states", gameName, null, "game_state :)".getBytes()); //TODO actual state
+                String stateJson = ResponseSerializer.serializeGameState(state.getGameState()).toString();
+                channel.basicPublish("game_states", gameName, null, stateJson.getBytes());
             }
             catch (IOException e) {
                 System.out.println("Niepowodzenie podczas wysyłania do kolejki");
                 e.printStackTrace();
             }
             catch (InterruptedException e) {}
+            catch (ShutdownSignalException e) {}
         }
     }
 }
