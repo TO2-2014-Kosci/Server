@@ -68,13 +68,19 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
     @Override
     protected Response sendGameAction(GameAction action) {
         Request request = new GameActionRequest(loggedInUser, action);
+        String roomName = null;
+        if (action.getType() == GameActionType.JOIN_ROOM) {
+            roomName = ((JoinRoomAction) action).getGameRoom();
+            stateReceiver.bind(roomName);
+        }
+
         Response response = getResponse(request);
 
-        if (response.isSuccess())
-            if (action.getType() == GameActionType.JOIN_ROOM)
-                setCurrentRoom(((JoinRoomAction) action).getGameRoom());
-            else if (action.getType() == GameActionType.LEAVE_ROOM)
-                setCurrentRoom(null);
+        if (action.getType() == GameActionType.JOIN_ROOM)
+            if (response.isSuccess())
+                this.currentRoom = roomName;
+            else
+                stateReceiver.unbind(roomName);
 
         return response;
     }
@@ -82,10 +88,13 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
     @Override
     public Response createRoom(GameSettings settings) throws TimeoutException {
         Request request = new CreateGameRequest(loggedInUser, settings);
+        stateReceiver.bind(settings.getName());
         Response response = getResponse(request);
 
         if (response.isSuccess())
-            setCurrentRoom(settings.getName());
+            this.currentRoom = settings.getName();
+        else
+            stateReceiver.unbind(settings.getName());
 
         return response;
     }
@@ -98,17 +107,6 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
             e.printStackTrace();
             return new Response(Response.Type.FAILURE, "Błąd podczas połączenia z kolejką");
         }
-    }
-
-    private void setCurrentRoom(String currentRoom) {
-        if (currentRoom == null)
-            stateReceiver.unbind(this.currentRoom);
-        else if (this.currentRoom == null)
-            stateReceiver.bind(currentRoom);
-        else
-            throw new IllegalArgumentException("User is already in a room");
-
-        this.currentRoom = currentRoom;
     }
 
     private class StateReceiver extends Thread {
@@ -137,7 +135,6 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
                 try {
                     QueueingConsumer.Delivery delivery = consumer.nextDelivery();
                     String message = new String(delivery.getBody());
-                    String routingKey = delivery.getEnvelope().getRoutingKey();
 
                     proxy.sendState(ResponseSerializer.deserializeGameState(new JSONObject(message)));
                 }

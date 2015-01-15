@@ -2,10 +2,7 @@ package to2.dice.messaging.request;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import to2.dice.game.Dice;
-import to2.dice.game.GameInfo;
-import to2.dice.game.GameState;
-import to2.dice.game.Player;
+import to2.dice.game.*;
 import to2.dice.messaging.Response;
 
 import java.util.ArrayList;
@@ -77,16 +74,29 @@ public final class ResponseSerializer {
         if (state.getCurrentPlayer() != null)
             current_player = state.getCurrentPlayer().getName();
 
-        return new JSONObject().put("game_state", new JSONObject()
+        JSONObject json = new JSONObject()
                 .put("players", players)
                 .put("game_started", state.isGameStarted())
                 .put("current_player", current_player)
-                .put("round", state.getCurrentRound()));
+                .put("round", state.getCurrentRound());
+
+        if (state instanceof NGameState)
+            json.put("winning_number", ((NGameState)state).getWinningNumber());
+
+        return new JSONObject().put("game_state", json);
     }
 
     public static GameState deserializeGameState(JSONObject json) {
-        GameState state = new GameState();
         json = json.getJSONObject("game_state");
+
+        GameState state;
+        if (json.has("winning_number")) {
+            state = new NGameState();
+            ((NGameState)state).setWinningNumber(json.getInt("winning_number"));
+        }
+        else
+            state = new GameState();
+
         JSONArray jsonPlayers = json.getJSONArray("players");
         ArrayList<Player> players = new ArrayList<Player>(jsonPlayers.length());
 
