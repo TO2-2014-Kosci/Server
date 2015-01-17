@@ -2,6 +2,7 @@ package to2.dice.messaging;
 
 import com.rabbitmq.client.*;
 import org.json.JSONObject;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameState;
@@ -38,6 +39,12 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
             loggedInUser = login;
 
         return response;
+    }
+
+    @Override
+    public Response logout() throws TimeoutException {
+        this.loggedInUser = null;
+        throw new NotImplementedException(); //TODO guess what
     }
 
     @Override
@@ -81,6 +88,12 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
                 this.currentRoom = roomName;
             else
                 stateReceiver.unbind(roomName);
+        else if (action.getType() == GameActionType.LEAVE_ROOM) {
+            if (response.isSuccess()) {
+                stateReceiver.unbind(this.currentRoom);
+                this.currentRoom = null;
+            }
+        }
 
         return response;
     }

@@ -33,6 +33,9 @@ public abstract class AbstractConnectionProxy implements ConnectionProxy {
     public abstract Response login(String login) throws TimeoutException;
 
     @Override
+    public abstract Response logout() throws TimeoutException;
+
+    @Override
     public abstract List<GameInfo> getRoomList() throws TimeoutException;
 
     @Override

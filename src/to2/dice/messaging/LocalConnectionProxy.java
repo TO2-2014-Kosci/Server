@@ -28,6 +28,13 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
     }
 
     @Override
+    public Response logout() throws TimeoutException {
+        String login = this.loggedInUser;
+        this.loggedInUser = null;
+        return server.logout(login);
+    }
+
+    @Override
     public List<GameInfo> getRoomList() {
         return server.getRoomList();
     }
