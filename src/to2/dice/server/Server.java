@@ -41,10 +41,10 @@ public class Server implements GameServer {
      */
     public Response login(String login) {
         if (login == null || login.replaceAll(" ", "").length() == 0)
-            return new Response(Response.Type.FAILURE, "Login can't be blank");
+            return new Response(Response.Type.FAILURE, "Login nie może być pusty");
 
         if (players.containsKey(login)) {
-            return new Response(Response.Type.FAILURE, "Login is not unique");
+            return new Response(Response.Type.FAILURE, "Login nie jest unikalny");
         } else {
             players.put(login, null);
             return new Response(Response.Type.SUCCESS);
@@ -58,7 +58,7 @@ public class Server implements GameServer {
      */
     public Response logout(String login) {
         if (login == null)
-            return new Response(Response.Type.FAILURE, "Login couldn't be blank");
+            return new Response(Response.Type.FAILURE, "Nie można wylogować użytkownika bez loginu");
         if (players.containsKey(login)) {
             if (players.get(login)!=null) {
                 GameAction leaveRoomAction = new GameAction(GameActionType.LEAVE_ROOM, login);
@@ -67,7 +67,7 @@ public class Server implements GameServer {
             players.remove(login);
             return new Response(Response.Type.SUCCESS);
         } else {
-            return new Response(Response.Type.FAILURE, "Player wasn't signed in");
+            return new Response(Response.Type.FAILURE, "Użytkownik nie był zalogowany");
         }
     }
 
@@ -79,18 +79,18 @@ public class Server implements GameServer {
      */
     public Response createRoom(GameSettings roomSettings, String creator) {
         if (!players.keySet().contains(creator))
-            return new Response(Response.Type.FAILURE, String.format("User %s not logged in", creator));
+            return new Response(Response.Type.FAILURE, String.format("Użytkownik %s nie jest zalogowany", creator));
 
         String newName = roomSettings.getName();
 
         for (GameController c : controllers)
             if (c.getGameInfo().getSettings().getName().equals(newName))
-                return new Response(Response.Type.FAILURE, String.format("Game room with name %s already exists", newName));
+                return new Response(Response.Type.FAILURE, String.format("Pokój o nazwie %s już istnieje", newName));
 
         GameController gameController = GameControllerFactory.createGameControler(this, roomSettings, creator);
 
         if (gameController == null)
-            return new Response(Response.Type.FAILURE, "Failed to create game room");
+            return new Response(Response.Type.FAILURE, "Nie udało się stworzyć pokoju");
 
         controllers.add(gameController);
         players.put(creator, gameController);
@@ -110,7 +110,7 @@ public class Server implements GameServer {
             GameController controller;
             if ((controller = players.get(action.getSender())) != null)
                 return new Response(Response.Type.FAILURE,
-                        String.format("You are already in room %s", controller.getGameInfo().getSettings().getName()));
+                        String.format("Jesteś już w pokoju %s", controller.getGameInfo().getSettings().getName()));
 
             JoinRoomAction jra = (JoinRoomAction)action;
             for (GameController gc : controllers) {
@@ -125,7 +125,7 @@ public class Server implements GameServer {
             gameController = players.get(action.getSender());
 
         if (gameController == null)
-            return new Response(Response.Type.FAILURE, "User is not in any room");
+            return new Response(Response.Type.FAILURE, "Użytkownik nie jest w żadnym pokoju");
 
         Response response = gameController.handleGameAction(action);
         if (response.isSuccess() && action.getType() == GameActionType.LEAVE_ROOM)
@@ -170,7 +170,7 @@ public class Server implements GameServer {
                 lcp.sendState(gameState);
         }
 
-        messageServer.pushState(gameController, gameState); // TODO Remote
+        messageServer.pushState(gameController, gameState);
     }
 
     /**
@@ -179,8 +179,6 @@ public class Server implements GameServer {
      */
     @Override
     public void finishGame(GameController gameController) {
-        //TODO Sending information to players
-
         controllers.remove(gameController);
         for (String player : players.keySet())
             if (players.get(player) != null && players.get(player).equals(gameController))

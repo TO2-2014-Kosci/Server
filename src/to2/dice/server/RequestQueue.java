@@ -1,6 +1,8 @@
 package to2.dice.server;
 
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.ShutdownSignalException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import to2.dice.messaging.Response;
 import to2.dice.messaging.request.*;

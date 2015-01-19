@@ -1,7 +1,6 @@
 package to2.dice.server;
 
 import com.rabbitmq.client.ShutdownSignalException;
-import to2.dice.game.GameState;
 import to2.dice.messaging.request.ResponseSerializer;
 
 import java.io.IOException;

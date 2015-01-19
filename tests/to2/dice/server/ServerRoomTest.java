@@ -1,5 +1,6 @@
 package to2.dice.server;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,11 +20,15 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * @author Fan, Janusz
+ * Tests Server methods associated with GameControllers
+ */
 @RunWith(org.powermock.modules.junit4.PowerMockRunner.class)
 @PrepareForTest(GameControllerFactory.class)
-public class ServerCreateRoomTest {
+public class ServerRoomTest {
     @InjectMocks
-    Server server;
+    Server server = new Server();
 
     @Test
     public void testCreateRoom() throws Exception {

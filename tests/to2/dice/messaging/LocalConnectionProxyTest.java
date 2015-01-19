@@ -1,5 +1,6 @@
 package to2.dice.messaging;
 
+import org.json.JSONArray;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,32 +90,32 @@ public class LocalConnectionProxyTest {
     }
 
     @Test
-    public void testSitDown() throws Exception {
+    public void testSimpleGameTest() throws Exception {
+        final String login = "JM";
 
-    }
+        lcp = new LocalConnectionProxy(server, new ServerMessageListener() {
+            @Override
+            public void onGameStateChange(GameState gameState) {
+                if (!gameState.isGameStarted())
+                    return;
 
-    @Test
-    public void testStandUp() throws Exception {
+                if (gameState.getCurrentPlayer() != null && gameState.getCurrentPlayer().getName().equals(login)) {
+                    lcp.reroll(new boolean[] { true, false, false, true, false });
+                }
 
-    }
+                String player;
+                if (gameState.getCurrentPlayer() != null) {
+                    player = gameState.getCurrentPlayer().getName();
+                    String dice = new JSONArray(gameState.getCurrentPlayer().getDice().getDiceArray()).toString();
+                    System.out.format("Ruch gracza %s, kości: %s%n", player, dice);
+                }
+            }
+        });
 
-    @Test
-    public void testReroll() throws Exception {
+        lcp.login(login);
+        lcp.createRoom(new GameSettings(GameType.POKER, 5, "The Game", 1, 20, 0, 2, new HashMap<BotLevel, Integer>()));
+        lcp.sitDown();
 
-    }
-
-    @Test
-    public void testConnect() throws Exception {
-
-    }
-
-    @Test
-    public void testSendGameAction() throws Exception {
-
-    }
-
-    @Test
-    public void testSendState() throws Exception {
-
+        Thread.sleep(2000);
     }
 }

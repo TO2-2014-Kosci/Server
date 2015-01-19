@@ -1,9 +1,7 @@
 package to2.dice.messaging;
 
-import to2.dice.controllers.GameController;
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
-import to2.dice.game.GameState;
 import to2.dice.server.Server;
 import to2.dice.server.ServerMessageListener;
 
@@ -12,7 +10,8 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by Fan on 2014-12-19.
+ * @author Fan
+ * Connection Proxy used when direct access to Server object is possible
  */
 public class LocalConnectionProxy extends AbstractConnectionProxy {
 
@@ -115,10 +114,7 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
     @Override
     protected boolean connect(Object serverLink) {
         server = (Server) serverLink;
-        if (server == null)
-            return false;
-
-        return true;
+        return server != null;
     }
 
     @Override

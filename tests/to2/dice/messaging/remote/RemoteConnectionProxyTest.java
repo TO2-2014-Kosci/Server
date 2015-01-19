@@ -118,7 +118,7 @@ public class RemoteConnectionProxyTest {
                     }
                 }
 
-                String player = "-";
+                String player;
                 if (gameState.getCurrentPlayer() != null) {
                     player = gameState.getCurrentPlayer().getName();
                     String dice = new JSONArray(gameState.getCurrentPlayer().getDice().getDiceArray()).toString();
@@ -131,6 +131,6 @@ public class RemoteConnectionProxyTest {
         rcp.createRoom(new GameSettings(GameType.POKER, 5, "The Game", 1, 20, 0, 2, new HashMap<BotLevel, Integer>()));
         rcp.sitDown();
 
-        Thread.sleep(15000);
+        Thread.sleep(2000);
     }
 }
