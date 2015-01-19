@@ -130,6 +130,8 @@ public class Server implements GameServer {
         Response response = gameController.handleGameAction(action);
         if (response.isSuccess() && action.getType() == GameActionType.LEAVE_ROOM)
             players.put(action.getSender(), null);
+        if (!response.isSuccess() && action.getType() == GameActionType.JOIN_ROOM)
+            players.put(action.getSender(), null);
 
         return response;
     }
@@ -161,10 +163,10 @@ public class Server implements GameServer {
      */
     @Override
     public void sendToAll(GameController gameController, GameState gameState) {
-        List<String> players = playersInRoom(gameController);
+        String roomName = gameController.getGameInfo().getSettings().getName();
 
         for (LocalConnectionProxy lcp : localProxies) {
-            if (players.contains(lcp.getLoggedInUser()))
+            if (lcp.receivesGameStateFrom(roomName))
                 lcp.sendState(gameState);
         }
 
@@ -183,21 +185,6 @@ public class Server implements GameServer {
         for (String player : players.keySet())
             if (players.get(player) != null && players.get(player).equals(gameController))
                 players.put(player, null);
-    }
-
-    private List<String> playersInRoom(GameController room) {
-        if (this.controllers.size() == 0) return new ArrayList<String>();
-
-        int initial = this.players.size() / this.controllers.size();
-        ArrayList<String> result = new ArrayList<String>(initial);
-        GameController curr;
-
-        for (String player : players.keySet()) {
-            curr = players.get(player);
-            if (curr != null && curr.equals(room))
-                result.add(player);
-        }
-        return result;
     }
 
     public void close() {

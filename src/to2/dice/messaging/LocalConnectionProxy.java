@@ -1,5 +1,6 @@
 package to2.dice.messaging;
 
+import to2.dice.controllers.GameController;
 import to2.dice.game.GameInfo;
 import to2.dice.game.GameSettings;
 import to2.dice.game.GameState;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeoutException;
 public class LocalConnectionProxy extends AbstractConnectionProxy {
 
     private Server server;
+    private String roomName;
 
     public LocalConnectionProxy(Object serverLink, ServerMessageListener listener) throws ConnectException {
         super(serverLink, listener);
@@ -41,13 +43,21 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
 
     @Override
     public Response createRoom(GameSettings settings) {
-        return server.createRoom(settings, this.loggedInUser);
+        this.roomName = settings.getName();
+        Response response = server.createRoom(settings, this.loggedInUser);
+        if (!response.isSuccess())
+            this.roomName = null;
+        return response;
     }
 
     @Override
     public Response joinRoom(String roomName) {
         try {
-            return super.joinRoom(roomName);
+            this.roomName = roomName;
+            Response response =  super.joinRoom(roomName);
+            if (!response.isSuccess())
+                this.roomName = null;
+            return response;
         }
         catch(TimeoutException e) {
             return new Response(Response.Type.FAILURE, "Unknown error");
@@ -57,7 +67,10 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
     @Override
     public Response leaveRoom() {
         try {
-            return super.leaveRoom();
+            Response response =  super.leaveRoom();
+            if (response.isSuccess())
+                this.roomName = null;
+            return response;
         }
         catch(TimeoutException e) {
             return new Response(Response.Type.FAILURE, "Unknown error");
@@ -113,11 +126,7 @@ public class LocalConnectionProxy extends AbstractConnectionProxy {
         return server.handleGameAction(action);
     }
 
-    /**
-     * for debugging purposes
-     * @param login login to set
-     */
-    public void setLoggedInUser(String login) {
-        this.loggedInUser = login;
+    public boolean receivesGameStateFrom(String roomName) {
+        return (this.roomName != null) && (this.roomName.equals(roomName));
     }
 }
