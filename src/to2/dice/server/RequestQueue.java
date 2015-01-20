@@ -52,6 +52,10 @@ public class RequestQueue extends Queue {
                             LoginRequest loginRequest = (LoginRequest) request;
                             response = server.login(loginRequest.getLogin());
                             break;
+                        case LOGOUT:
+                            LogoutRequest logoutRequest = (LogoutRequest) request;
+                            response = server.logout(logoutRequest.getLogin());
+                            break;
                         case CREATE_GAME:
                             CreateGameRequest createGameRequest = (CreateGameRequest) request;
                             response = server.createRoom(createGameRequest.getSettings(), createGameRequest.getLogin());
@@ -61,7 +65,7 @@ public class RequestQueue extends Queue {
                             response = server.handleGameAction(gameActionRequest.getAction());
                             break;
                         default:
-                            throw new NotImplementedException(); //TODO
+                            throw new NotImplementedException();
                     }
 
                     channel.basicPublish("", props.getReplyTo(), replyProps, ResponseSerializer.serializeResponse(response).toString().getBytes()); //TODO "ok" -> actual response

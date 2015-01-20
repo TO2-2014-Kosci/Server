@@ -43,8 +43,12 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
 
     @Override
     public Response logout() throws TimeoutException {
-        this.loggedInUser = null;
-        throw new NotImplementedException(); //TODO guess what
+        Request request = new LogoutRequest(loggedInUser);
+        Response response = getResponse(request);
+        if (response.isSuccess())
+            loggedInUser = null;
+
+        return response;
     }
 
     @Override

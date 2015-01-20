@@ -9,7 +9,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public abstract class Request {
     public enum Type {
-        LOGIN, CREATE_GAME, GAME_ACTION, GET_ROOM_LIST
+        LOGIN, LOGOUT, CREATE_GAME, GAME_ACTION, GET_ROOM_LIST
     }
 
     public Request() {}
@@ -27,6 +27,8 @@ public abstract class Request {
             request = new GetRoomListRequest();
         else if (type.equals("create_game"))
             request = new CreateGameRequest();
+        else if (type.equals("logout_request"))
+            request = new LogoutRequest();
         else
             request = new GameActionRequest();
 
