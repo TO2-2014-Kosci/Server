@@ -19,6 +19,10 @@ public abstract class Queue implements Runnable {
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(host);
+        factory.setUsername("dice_server");
+        factory.setPassword("TheySeeMeRerollin");
+        factory.setVirtualHost("gui_host");
+        factory.setPort(5672);
         connection = factory.newConnection();
         channel = connection.createChannel();
     }

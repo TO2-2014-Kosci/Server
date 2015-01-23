@@ -126,6 +126,16 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
         }
     }
 
+    private static Connection getConnection(String host) throws IOException {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(host);
+        factory.setUsername("gui_user");
+        factory.setPassword("TO2rbenvawesome");
+        factory.setVirtualHost("gui_host");
+        factory.setPort(5672);
+        return factory.newConnection();
+    }
+
     private class StateReceiver extends Thread {
         private final Connection connection;
         private final Channel channel;
@@ -135,9 +145,7 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
 
         public StateReceiver(RemoteConnectionProxy proxy, String host) throws IOException {
             this.proxy = proxy;
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost(host);
-            connection = factory.newConnection();
+            connection = getConnection(host);
             channel = connection.createChannel();
 
             channel.exchangeDeclare("game_states", "direct");
@@ -189,9 +197,7 @@ public class RemoteConnectionProxy extends AbstractConnectionProxy {
         private final QueueingConsumer consumer;
 
         private RequestHandler(String host) throws IOException {
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost(host);
-            connection = factory.newConnection();
+            connection = getConnection(host);
             channel = connection.createChannel();
 
             replyQueueName = channel.queueDeclare().getQueue();
